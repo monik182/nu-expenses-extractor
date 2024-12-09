@@ -1,8 +1,6 @@
 import pandas as pd
 import camelot
-
-pdf_path = "./file.pdf"
-output_csv = "formatted_table_4.csv"
+import sys
 
 
 def extract_and_format_table(pdf_path):
@@ -67,12 +65,28 @@ def format_table_data(df):
     formatted_df = pd.DataFrame(formatted_data)
     return formatted_df
 
-try:
-    formatted_data = extract_and_format_table(pdf_path)
-    if formatted_data is not None:
-        formatted_data.to_csv(output_csv, index=False)
-        print(f"Table data successfully formatted and saved to {output_csv}")
-    else:
-        print("No table data extracted or formatted.")
-except Exception as e:
-    print(f"Error: {e}")
+def main(file_name, output_csv):
+    try:
+        formatted_data = extract_and_format_table(file_name)
+        if formatted_data is not None:
+            formatted_data.to_csv(output_csv, index=False)
+            print(f"Table data successfully formatted and saved to {output_csv}")
+        else:
+            print("No table data extracted or formatted.")
+    except Exception as e:
+        print(f"Error: {e}")
+
+
+if __name__ == "__main__":
+    file_name = sys.argv[1]
+    if file_name == "":
+        print("Please provide the file name")
+
+    output_csv = "output.csv"
+    if len(sys.argv) > 2 and sys.argv[2] != "":
+      output_csv = sys.argv[2]
+
+    if ".csv" not in output_csv:
+        output_csv = output_csv + ".csv"
+
+    main(file_name, output_csv)
